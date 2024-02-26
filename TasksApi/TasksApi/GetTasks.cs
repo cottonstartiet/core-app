@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using TasksApi;
 
 namespace Ritekode.TasksApi
 {
@@ -18,17 +19,19 @@ namespace Ritekode.TasksApi
             _logger = logger;
         }
 
-        [OpenApiOperation(operationId: "getName", tags: new[] { "name" }, Summary = "Gets the name", Description = "This gets the name.", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiOperation(operationId: "getTasks", tags: new[] { "tasks" }, Summary = "Gets tasks in a task list", Description = "Gets tasks in a task list.", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "name", In = ParameterLocation.Query, Required = true, Type = typeof(string), Summary = "The name", Description = "The name", Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Summary = "The response", Description = "This returns the response")]
+        [OpenApiParameter(name: "listId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Summary = "The name", Description = "The name", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/json", bodyType: typeof(List<TodoTask>), Summary = "List of tasks.", Description = "This returns the list of tasks.")]
         // Add these four attribute classes above
-        [Function("GetTasks")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
+        [Function("Lists")]
+        public IActionResult Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "lists/{listId}")] HttpRequest req,
+            string listId)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
-            string response = string.IsNullOrEmpty(req.Query["name"]) ? "Welcome to Azure!" : "Welcome " + req.Query["name"].ToString();
-            return new OkObjectResult(response);
+            List<TodoTask> tasks = [new TodoTask(1, "This is task 1"), new TodoTask(2, "This is task 2")];
+            _logger.LogInformation("Returning list with tasks: " + tasks.Count);
+            return (ActionResult)new OkObjectResult(tasks);
         }
     }
 }
