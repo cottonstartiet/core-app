@@ -31,6 +31,7 @@ namespace Ritekode.TasksApi
         {
             List<TodoTask> tasks = [new TodoTask(1, "This is task 1"), new TodoTask(2, "This is task 2")];
             _logger.LogInformation("Returning list with tasks: " + tasks.Count);
+            _logger.LogInformation("List id passed in path param");
             return (ActionResult)new OkObjectResult(tasks);
         }
     }
