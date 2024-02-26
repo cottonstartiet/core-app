@@ -19,7 +19,7 @@ namespace Ritekode.TasksApi
             _logger = logger;
         }
 
-        [OpenApiOperation(operationId: "getTasks", tags: new[] { "tasks" }, Summary = "Gets tasks in a task list", Description = "Gets tasks in a task list.", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiOperation(operationId: "getTasks", tags: new[] { "lists" }, Summary = "Get tasks", Description = "Get tasks in a task list.", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "listId", In = ParameterLocation.Path, Required = true, Type = typeof(string), Summary = "The name", Description = "The name", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/json", bodyType: typeof(List<TodoTask>), Summary = "List of tasks.", Description = "This returns the list of tasks.")]
