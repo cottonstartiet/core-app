@@ -24,8 +24,7 @@ namespace Ritekode.TasksApi
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/json", bodyType: typeof(ApiResponse<List<TodoTaskList>>), Summary = "List of lists for the user.", Description = "This returns the list of tasks.")]
         [Function("lists")]
         public IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "lists")] HttpRequest req,
-            string listId)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "lists")] HttpRequest req)
         {
             List<TodoTaskList> lists = [
                 new TodoTaskList("listId-1", "List 1 - Office work"),
